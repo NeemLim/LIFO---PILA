@@ -7,7 +7,7 @@ using namespace std;
 template <class T>
 class List	//Contains the activities of the list.
 {
-	class Node //Creates or nodes.
+	class Node //Holds our nodes.
 	{
 	public:
 		T data = NULL; //Holds a generic data value.
@@ -26,7 +26,7 @@ public:
 		beggining = nullptr;
 	}
 
-	void addItem(T data) //Adds an element to the list.
+	void Push(T data) //adds element at the end of the list.
 	{
 		Node* newNode, * cursor;
 		newNode = new Node();
@@ -42,17 +42,6 @@ public:
 			cursor->link = newNode;
 		}
 	}
-	T getValue(T index)	//
-	{
-		if (count() > index)
-		{
-			Node* cursor = beggining;
-			for (int i = 0; i < index; i++)
-				cursor = cursor->link;
-			return cursor->data;
-		}
-		return beggining->data;
-	}
 
 	int getPosition(T searchValue) //Returns the position where data was found.
 	{
@@ -63,24 +52,6 @@ public:
 		}
 		return -1;
 	}
-
-	//void showData()			Shows all element's value and positions		//Not adecuate
-	//{
-	//	Node* cursor = beggining;
-	//	for (int i = 0; i < count(); i = i + 3)
-	//	{
-	//		for (int j = 0; j < 3; j++)
-	//		{
-	//			cout << "Item [" << i + j + 1 << "] = " << cursor->data << endl;
-	//			if (cursor->link == nullptr)
-	//				break;
-	//			cursor = cursor->link;
-	//		}
-	//		if (i + 3 >= count())
-	//			break;
-	//		system("pause");
-	//	}
-	//}
 
 	int count() //Counts the elements in the list.
 	{
@@ -94,26 +65,7 @@ public:
 		return elementCount;
 	}
 
-	void updateData(T valueToUpdate) //Changes the value of an element in the list.
-	{
-		int valuePos = getPosition(valueToUpdate);
-
-		if (valuePos > -1) //If valuePos exists in the list.
-		{
-			int valueToReplace;
-			Node* cursor = beggining;
-			cout << "Input the updated value: "; cin >> valueToReplace;
-			for (int i = 0; i < valuePos; i++)
-				cursor = cursor->link;
-			cursor->data = valueToReplace;
-
-			cout << "\n>Value replaced successfully." << endl;
-		}
-		else
-			cout << "\n>No matching values." << endl;
-	}
-
-	void deleteSpecific(T valueToDelete) //Deletes a particular element in the list.
+	void pop(T valueToDelete) //Deletes a particular element in the list.
 	{
 		int dataPos = getPosition(valueToDelete);
 
@@ -143,7 +95,7 @@ public:
 			cout << "\n>No matching values." << endl;
 	}
 
-	void deleteEverything() //Clears list.
+	void deleteAll() //Clears list.
 	{
 		Node* erase;
 
@@ -164,6 +116,17 @@ public:
 		}
 		return false;
 	}
+	T getValue(T index)	//
+	{
+		if (count() > index)
+		{
+			Node* cursor = beggining;
+			for (int i = 0; i < index; i++)
+				cursor = cursor->link;
+			return cursor->data;
+		}
+		return beggining->data;
+	}
 };
 
 int main()
@@ -180,14 +143,12 @@ int main()
 		do //Loop until correct input
 		{
 			cout << endl << "Choose an option" << endl;
-			cout << "[1] Add data to the collection." << endl;
+			cout << "[1] Push" << endl;
 			cout << "[2] Search value in the collection." << endl;
-			cout << "[3] Show value according to element's position." << endl;
-			cout << "[4] Show the elements' count." << endl;
+			cout << "[4] Count" << endl;
 			cout << "[5] Show all elements in the list." << endl;
-			cout << "[6] Update data value." << endl;
-			cout << "[7] Erase an element in the collection." << endl;
-			cout << "[8] Delete everything" << endl;
+			cout << "[7] Pop" << endl;
+			cout << "[8] Delete all" << endl;
 			cout << "[9] Exit." << endl;
 			cout << ">Answer: "; choice = _getch();
 			system("cls");
@@ -206,7 +167,7 @@ int main()
 				{
 					cout << "Element [" << myCollection.count() + 1 << "]: ";
 					cin >> dataValue;
-					myCollection.addItem(dataValue);
+					myCollection.Push(dataValue);
 				}
 				GetAsyncKeyState; //Gets the current pressed key from the user.
 			}
@@ -222,16 +183,6 @@ int main()
 				cout << "\n>Matching value found \n";
 			break;
 
-		case '3': //Show Value
-			if (myCollection.checkEmpty())
-				break;
-			cout << "Input the position of the element you wish to search: "; cin >> searchPos;
-			(searchPos > myCollection.count() or searchPos <= 0) ?
-				cout << "\n>Out of boundaries.\n"
-				:
-				cout << "\n>Matching value in that postion = " << myCollection.getValue(searchPos - 1) << endl;
-			break;
-
 		case '4': //Count
 			if (myCollection.checkEmpty())
 				break;
@@ -245,23 +196,16 @@ int main()
 				cout << "Item [" << i + 1 << "] = " << myCollection.getValue(i) << endl;
 			break;
 
-		case '6': //Update
-			if (myCollection.checkEmpty())
-				break;
-			cout << "Input the value of the element you wish to update: ";  cin >> dataValue;
-			myCollection.updateData(dataValue);
-			break;
-
 		case '7':	//Delete particular
 			if (myCollection.checkEmpty()) break;
 			cout << "Input the value of the element you wish to delete: ";  cin >> dataValue;
-			myCollection.deleteSpecific(dataValue);
+			myCollection.pop(dataValue);
 			break;
 
 		case '8':	//Clear list
 			if (myCollection.checkEmpty())
 				break;
-			myCollection.deleteEverything();
+			myCollection.deleteAll();
 			cout << "\n List is now clear, all elements deleted successfully\n";
 			break;
 
