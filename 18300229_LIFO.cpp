@@ -65,34 +65,22 @@ public:
 		return elementCount;
 	}
 
-	void pop(T valueToDelete) //Deletes a particular element in the list.
+	void pop() //Deletes a particular element in the list.
 	{
-		int dataPos = getPosition(valueToDelete);
-
-		if (dataPos > -1) //If element was found, execute erase function.
+		if (count() > 1) //more than a single node
 		{
 			Node* erase = beggining,
 				* prevElement = nullptr;
-
-			if (dataPos == 0) //If first element is deleted.
+			while (erase->link)	//moves cursor while link not null
 			{
-				beggining = beggining->link;
-				delete erase;
+				prevElement = erase;
+				erase = erase->link;
 			}
-			else
-			{
-				for (int i = 0; i < dataPos; i++)
-				{
-					prevElement = erase;
-					erase = erase->link;
-				}
-				prevElement->link = erase->link;
-				delete erase;
-			}
-			cout << "\n>Value found and deleted successfully." << endl;
+			delete erase;	//deletes last element.
+			prevElement->link = nullptr;	//points now last element to null;
 		}
 		else
-			cout << "\n>No matching values." << endl;
+			beggining = nullptr;	//set beginning to null.
 	}
 
 	void deleteAll() //Clears list.
@@ -156,31 +144,12 @@ int main()
 
 		switch (choice)
 		{
-		case '1':	//Add
-
-			cout << endl << "*** Press <Left control Key> on your last the data input to finish filling. ***" << endl;
-			cout << "*** Data input will automatically stop after 100 elements." << endl << endl;
-			cout << "Fill the array: " << endl;
-			for (int i = 0; (GetAsyncKeyState(VK_LCONTROL)) == false and i < 100; i++)
-			{
-				if ((GetAsyncKeyState(VK_LCONTROL)) == false)
-				{
-					cout << "Element [" << myCollection.count() + 1 << "]: ";
-					cin >> dataValue;
-					myCollection.Push(dataValue);
-				}
-				GetAsyncKeyState; //Gets the current pressed key from the user.
-			}
-			break;
-
-		case '2':	//Search
-			if (myCollection.checkEmpty())
-				break;
-			cout << "Input the value of the element you wish to search: "; cin >> dataValue;
-			(myCollection.getPosition(dataValue) == -1) ?
-				cout << "\nNo matches have been found.\n"
-				:
-				cout << "\n>Matching value found \n";
+		case '1':	//Pop -- add element
+			cout << "Push:" << endl;
+			cout << "Item [" << myCollection.count() + 1 << "]: ";
+			cin >> dataValue;
+			myCollection.Push(dataValue);
+			cout << "item added" << endl;
 			break;
 
 		case '4': //Count
@@ -198,8 +167,7 @@ int main()
 
 		case '7':	//Delete particular
 			if (myCollection.checkEmpty()) break;
-			cout << "Input the value of the element you wish to delete: ";  cin >> dataValue;
-			myCollection.pop(dataValue);
+			myCollection.pop();
 			break;
 
 		case '8':	//Clear list
