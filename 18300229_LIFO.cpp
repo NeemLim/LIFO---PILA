@@ -18,12 +18,12 @@ class List	//Contains the activities of the list.
 		}
 	};
 
-	Node* beggining;
+	Node* beginning;
 
 public:
 	List()
 	{
-		beggining = nullptr;
+		beginning = nullptr;
 	}
 
 	void push(T data) //adds element at the end of the list.
@@ -32,11 +32,11 @@ public:
 		newNode = new Node();
 		newNode->data = data;
 
-		if (beggining == nullptr)
-			beggining = newNode;
+		if (beginning == nullptr)
+			beginning = newNode;
 		else
 		{
-			cursor = beggining;
+			cursor = beginning;
 			while (cursor->link) //while next link is not empty.
 				cursor = cursor->link;
 			cursor->link = newNode;
@@ -46,7 +46,7 @@ public:
 	int count() //Counts the elements in the list.
 	{
 		int elementCount = 0;
-		Node* cursor = beggining;
+		Node* cursor = beginning;
 		while (cursor)
 		{
 			elementCount++;
@@ -55,11 +55,11 @@ public:
 		return elementCount;
 	}
 
-	void pop() //Deletes a particular element in the list.
+	void pop() //Deletes first (newest) element in the list.
 	{
 		if (count() > 1) //more than a single node
 		{
-			Node* erase = beggining,
+			Node* erase = beginning,
 				* prevElement = nullptr;
 
 			while (erase->link)	//moves cursor while link not null
@@ -71,17 +71,17 @@ public:
 			prevElement->link = nullptr;	//points now last element to null;
 		}
 		else
-			beggining = nullptr;	//set beginning to null.
+			beginning = nullptr;	//set beginning to null.
 	}
 
 	void deleteAll() //Clears list.
 	{
 		Node* erase;
 
-		while (beggining) //Deletes from first to last while link not null.
+		while (beginning) //Deletes from first to last while link not null.
 		{
-			erase = beggining;
-			beggining = beggining->link;
+			erase = beginning;
+			beginning = beginning->link;
 			delete erase;
 		}
 	}
@@ -139,13 +139,14 @@ int main()
 		case '3':	//Pop
 			if (myCollection.checkEmpty()) break;
 			myCollection.pop();
+			cout << ">Last element has been deleted.\n";
 			break;
 
 		case '4':	//Clear list
 			if (myCollection.checkEmpty())
 				break;
 			myCollection.deleteAll();
-			cout << "\n List is now clear, all elements deleted successfully\n";
+			cout << "\nList is now clear, all elements deleted successfully\n";
 			break;
 
 		case '5':	//Exit
